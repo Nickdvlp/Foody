@@ -48,6 +48,7 @@ const FilterList = ({ setFilters }: FilterListProps) => {
   };
 
   const applyFilters = () => {
+    console.log(selectedCategories, priceRange, isVeg, minRating);
     setFilters({
       selectedCategories,
       priceRange,

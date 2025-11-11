@@ -24,8 +24,18 @@ import z from "zod";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import Uploader from "@/modules/partner/ui/uploader";
-import { Partner } from "@/modules/partner/ui/view/partner-view";
-import { updatePartner } from "@/modules/partner/server/update-partner";
+import { updateRestaurant } from "@/modules/restaurant/server/update-restaurant";
+
+interface Restaurant {
+  id: string;
+  partnerId: string;
+  name: string | undefined;
+  address: string | undefined;
+  description: string | undefined;
+  imageUrl: string | undefined;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 const formSchema = z.object({
   imageUrl: z.string().url({ message: "Please upload an image." }),
@@ -35,31 +45,36 @@ const formSchema = z.object({
   address: z
     .string()
     .min(10, { message: "Description must be at least 10 characters." }),
+  description: z
+    .string()
+    .min(10, { message: "Description must be at least 10 characters." }),
 });
 
 interface EditItemProps {
-  partner: Partner | null;
+  restaurant: Restaurant | null;
   onSuccess: () => void;
 }
 
-export function EditPartner({ partner, onSuccess }: EditItemProps) {
+export function EditRestaurant({ restaurant, onSuccess }: EditItemProps) {
   const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      imageUrl: partner?.imageUrl,
-      name: partner?.name,
-      address: partner?.address,
+      imageUrl: restaurant?.imageUrl,
+      name: restaurant?.name,
+      address: restaurant?.address,
+      description: restaurant?.description,
     },
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (!partner?.id) return;
+    if (!restaurant?.id) return;
     setLoading(true);
-    await updatePartner({ partnerId: partner.id, values });
+    await updateRestaurant({ restaurantId: restaurant.id, values });
     onSuccess();
     setLoading(false);
+    console.log(values);
   };
 
   return (
@@ -67,7 +82,7 @@ export function EditPartner({ partner, onSuccess }: EditItemProps) {
       <DialogHeader>
         <DialogTitle>Edit Item</DialogTitle>
         <DialogDescription>
-          Update the details of <strong>{partner?.name}</strong>.
+          Update the details of <strong>{restaurant?.name}</strong>.
         </DialogDescription>
       </DialogHeader>
 
@@ -111,6 +126,20 @@ export function EditPartner({ partner, onSuccess }: EditItemProps) {
                 <FormLabel>Address</FormLabel>
                 <FormControl>
                   <Input placeholder="Enter Your Address" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter Your Description" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

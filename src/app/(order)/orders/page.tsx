@@ -11,6 +11,9 @@ import OrderCancel from "@/modals/order-cancel";
 import { Loader2 } from "lucide-react";
 import { RealtimeEvents } from "@/lib/realtime";
 import { redirect } from "next/navigation";
+import { RatingDialog } from "@/modals/rating-modal";
+import { submitRatingsAndReviews } from "@/modules/restaurant/server/ratings-reviews";
+import toast from "react-hot-toast";
 
 interface OrderItem {
   id: string;
@@ -41,6 +44,9 @@ const OrderPage = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isOrderCancel, setIsOrderCancel] = useState<boolean>(false);
   const [orderStatus, setOrderStatus] = useState("Placed");
+  const [openRatingCard, setOpenRatingCard] = useState(false);
+
+  const [selectedOrder, setSelectedOrder] = useState<any>(null);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -63,8 +69,6 @@ const OrderPage = () => {
     },
   });
 
-  console.log(orderStatus);
-
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -86,6 +90,22 @@ const OrderPage = () => {
     );
   }
 
+  const handleSubmitRating = async (rating: number, review: string) => {
+    const res = await submitRatingsAndReviews({
+      rating,
+      review,
+      restaurantId: selectedOrder.restaurantId,
+      orderId: selectedOrder.id,
+    });
+
+    if (res.success === false) {
+      toast.error("You already rated this order or something else.");
+    }
+    if (res.success === true) {
+      toast.success("We successfully collected your feedback.Thank You!");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-orange-50 py-16 px-6 md:px-12 lg:px-24">
       <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">
@@ -93,11 +113,14 @@ const OrderPage = () => {
       </h1>
 
       <div className="max-w-6xl mx-auto space-y-8">
-        {orders.map((order) => (
+        {[...orders].reverse().map((order) => (
           <Card
             key={order.id}
             className="bg-white/90 backdrop-blur-md shadow-lg border border-orange-200 rounded-2xl hover:shadow-xl transition-all duration-300 hover:scale-102 cursor-pointer"
-            onClick={() => redirect(`track-order/${order.id}`)}
+            onClick={(e) => {
+              e.stopPropagation();
+              redirect(`track-order/${order.id}`);
+            }}
           >
             <CardHeader>
               <CardTitle className="text-xl font-semibold text-gray-800 flex justify-between items-center">
@@ -113,7 +136,7 @@ const OrderPage = () => {
                 </span>
               </CardTitle>
               <div className="bg-orange-600 w-fit px-5 py-2 rounded-2xl text-white font-semibold">
-                {orderStatus}
+                {order.orderStatus}
               </div>
             </CardHeader>
 
@@ -131,6 +154,19 @@ const OrderPage = () => {
               </p>
 
               <Separator className="my-2" />
+
+              {order.orderStatus === "Delivered" && (
+                <div
+                  className="border border-yellow-400 w-fit p-2 rounded-2xl text-yellow-700 px-4 bg-yellow-200 hover:scale-105"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedOrder(order);
+                    setOpenRatingCard(true);
+                  }}
+                >
+                  Rate Now
+                </div>
+              )}
 
               <div className="space-y-3">
                 {order.items.map((item: any) => (
@@ -181,6 +217,12 @@ const OrderPage = () => {
           </Card>
         ))}
       </div>
+      <RatingDialog
+        open={openRatingCard}
+        onClose={() => setOpenRatingCard(false)}
+        onSubmit={handleSubmitRating}
+        restaurantName={selectedOrder?.restaurantName}
+      />
     </div>
   );
 };

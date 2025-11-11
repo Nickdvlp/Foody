@@ -4,7 +4,16 @@ import { useEffect, useState } from "react";
 import { getRestaurant } from "../server/get-restaurant";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Bell, Dot, Loader2, Menu, Plus } from "lucide-react";
+import {
+  Bell,
+  Dot,
+  Edit,
+  Loader2,
+  Menu,
+  MenuIcon,
+  Plus,
+  Trash2,
+} from "lucide-react";
 import ItemsTable from "../components/items-table";
 
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -14,8 +23,18 @@ import { redirect } from "next/navigation";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { getOrdersSeen } from "@/modules/order/server/get-orders-seen";
 import { updateOrdersIsSeen } from "@/modules/order/server/update-orders-isSeen";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { EditRestaurant } from "@/modals/edit-restaurant";
+import { DeleteRestaurant } from "@/modals/delete-restaurant";
 
-interface Restaurant {
+export interface Restaurant {
   id: string;
   partnerId: string;
   name: string;
@@ -34,13 +53,15 @@ const RestaurantView = ({ restaurantId }: RestaurantsViewProps) => {
   const [refreshItemsTable, setRefreshItemsTable] = useState<number>(0);
   const [open, setOpen] = useState<boolean>(false);
   const [hasUnseenOrders, setHasUnseenOrders] = useState<boolean>(false);
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   useEffect(() => {
     const fetchRestaurant = async () => {
       const data = await getRestaurant({ restaurantId });
       setRestaurant(data);
     };
     fetchRestaurant();
-  }, [restaurantId]);
+  }, [restaurantId, editOpen, deleteOpen]);
 
   useEffect(() => {
     const fetchOrdersIsSeen = async () => {
@@ -190,7 +211,44 @@ const RestaurantView = ({ restaurantId }: RestaurantsViewProps) => {
         />
       </div>
       <div className="absolute top-8 right-8">
-        <Menu />
+        <DropdownMenu modal={false}>
+          <DropdownMenuTrigger className="text-gray-600 hover:text-gray-800 transition">
+            <MenuIcon size={20} />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="flex flex-col">
+            <DropdownMenuLabel>Settings</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+
+            <DropdownMenuItem onClick={() => setEditOpen(true)}>
+              <Edit className="mr-2 size-4" /> Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="text-white bg-red-500 hover:bg-red-700 hover:text-white mt-1"
+              onClick={() => setDeleteOpen(true)}
+            >
+              <Trash2 className="mr-2 size-4 text-white hover:text-white" />{" "}
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <Dialog open={editOpen} onOpenChange={setEditOpen}>
+          <DialogContent>
+            <EditRestaurant
+              restaurant={restaurant}
+              onSuccess={() => setEditOpen(false)}
+            />
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+          <DialogContent>
+            <DeleteRestaurant
+              restaurant={restaurant}
+              onSuccess={() => setDeleteOpen(false)}
+            />
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );

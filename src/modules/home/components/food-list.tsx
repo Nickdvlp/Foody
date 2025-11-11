@@ -61,7 +61,7 @@ const FoodList = ({ filters }: FoodListProps) => {
 
   if (foodItems.length === 0) {
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 place-items-center  mt-4 relative">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 place-items-center  mt-4 relative">
         {Array.from({ length: 6 }).map((_, i) => (
           <Skeleton
             key={i}

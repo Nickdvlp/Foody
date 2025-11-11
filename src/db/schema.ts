@@ -151,3 +151,20 @@ export const orderItemsTable = pgTable("order_items", {
   quantity: integer("quantity").notNull(),
   price: numeric("price", { precision: 10, scale: 2 }).notNull(),
 });
+
+export const ratingsReviewsTable = pgTable("ratings_reviews", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => usersTable.clerkId, { onDelete: "cascade" }),
+  restaurantId: uuid("restaurant_id")
+    .notNull()
+    .references(() => restaurantTable.id, { onDelete: "cascade" }),
+  orderId: uuid("order_id")
+    .notNull()
+    .references(() => ordersTable.id, { onDelete: "cascade" }),
+
+  rating: integer("rating").notNull(),
+  review: text("review"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
