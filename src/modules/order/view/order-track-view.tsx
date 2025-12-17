@@ -10,12 +10,13 @@ import { redirect } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { getTrackingAddresses } from "../server/get-tracking-addresses";
 import { getLatLong } from "../server/get-latLong";
+import { RouteMapProps } from "@/components/map-component";
 
 interface OrderTrackViewProps {
   orderId: string;
 }
 
-const DynamicMap = dynamic<{ addresses: Addresses | null }>(
+const DynamicMap = dynamic<RouteMapProps>(
   () => import("@/components/map-component"),
   {
     ssr: false,

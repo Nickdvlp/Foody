@@ -17,7 +17,6 @@ const updateCartItem = async ({ itemId, quantity }: updateCartItemProps) => {
     throw new Error("Unauthorized");
   }
 
-  // Find existing cart item for this user
   const existing = await db
     .select()
     .from(cartItemsTable)

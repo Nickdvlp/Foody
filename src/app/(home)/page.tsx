@@ -1,8 +1,15 @@
 "use client";
+import FullScreenLoader from "@/components/ui/full-screen-loader";
+import AIAssistant from "@/modules/home/components/ai-assistant";
 import FilterList from "@/modules/home/components/filter-list";
 import FoodList from "@/modules/home/components/food-list";
+import TopRatedButton from "@/modules/home/components/top-rated-button";
 import HomeCarousel from "@/modules/home/ui/home-carousel";
-import { useState } from "react";
+import { RootState } from "@/store";
+import { setLoading } from "@/store/food/foodSlice";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export interface Filter {
   selectedCategories: string[];
@@ -19,10 +26,16 @@ export default function Home() {
   });
 
   return (
-    <div>
-      <HomeCarousel />
-      <FilterList setFilters={setFilters} />
-      <FoodList filters={filters} />
+    <div className="relative">
+      <div>
+        <HomeCarousel />
+        <div className="flex items-center">
+          <FilterList setFilters={setFilters} />
+          <TopRatedButton />
+        </div>
+        <FoodList filters={filters} />
+        <AIAssistant />
+      </div>
     </div>
   );
 }

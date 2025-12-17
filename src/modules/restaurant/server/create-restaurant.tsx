@@ -1,7 +1,8 @@
 "use server";
 
 import { db } from "@/db";
-import { partnerTable, restaurantTable, usersTable } from "@/db/schema";
+import { restaurantTable, usersTable } from "@/db/schema";
+
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
@@ -18,33 +19,36 @@ export const createRestaurant = async ({
   values,
   partnerId,
 }: createPartnerProps) => {
-  const { userId: clerkId } = await auth();
+  try {
+    const { userId: clerkId } = await auth();
+    if (!clerkId) {
+      throw new Error("Unauthorized");
+    }
 
-  if (!clerkId) {
-    throw new Error("Unauthorized");
+    const [user] = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.clerkId, clerkId));
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const [restaurant] = await db
+      .insert(restaurantTable)
+      .values({
+        partnerId,
+        name: values.name,
+        imageUrl: values.imageUrl,
+        address: values.address,
+        description: values.description,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .returning();
+
+    return restaurant.id;
+  } catch (error) {
+    if (error) throw new Error("Something went wrong");
   }
-
-  const [user] = await db
-    .select()
-    .from(usersTable)
-    .where(eq(usersTable.clerkId, clerkId));
-
-  if (!user) {
-    throw new Error("User not found");
-  }
-
-  const [restaurant] = await db
-    .insert(restaurantTable)
-    .values({
-      partnerId,
-      name: values.name,
-      imageUrl: values.imageUrl,
-      address: values.address,
-      description: values.description,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    })
-    .returning();
-
-  return restaurant.id;
 };

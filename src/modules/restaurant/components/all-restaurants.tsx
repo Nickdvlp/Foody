@@ -1,6 +1,4 @@
 "use client";
-
-import { EllipsisVertical } from "lucide-react";
 import RestaurantsCard from "./restaurants-card";
 
 interface AllRestaurantsProps {

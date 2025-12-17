@@ -64,7 +64,6 @@ export const addToCart = async ({ itemId }: addToCartProps) => {
 
     return cartItem;
   } catch (error: any) {
-    // 👇 Convert to serializable object
-    return { error: error.message };
+    throw error;
   }
 };

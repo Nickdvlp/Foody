@@ -10,7 +10,7 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-interface RouteMapProps {
+export interface RouteMapProps {
   addresses: {
     restaurantCoords: { lat: number; lon: number };
     userCoords: { lat: number; lon: number };
@@ -97,7 +97,7 @@ export default function MapComponent({ addresses }: RouteMapProps) {
     };
 
     fetchRoute();
-  }, [addresses.restaurantCoords, addresses.userCoords]);
+  }, [addresses.restaurantCoords.lon, addresses.userCoords.lat]);
 
   return (
     <MapContainer

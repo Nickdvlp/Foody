@@ -5,10 +5,11 @@ import { FetchFood } from "../server/fetch-food";
 import FoodCard from "./food-card";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
-import { filteredFood } from "@/store/food/foodSlice";
+import { filteredFood, setLoading } from "@/store/food/foodSlice";
 import { setFoods } from "@/store/food/foodSlice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Loader2 } from "lucide-react";
+import Image from "next/image";
 
 interface Food {
   id: string;
@@ -37,16 +38,19 @@ interface FoodListProps {
 const FoodList = ({ filters }: FoodListProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const foodItems = useSelector((state: RootState) => state.food.foods);
+  const loading = useSelector((state: RootState) => state.food.loading);
 
   useEffect(() => {
     const fetchfood = async () => {
+      dispatch(setLoading(true));
       const food = await FetchFood();
-
-      const normalized = food.map((item) => ({
-        ...item,
-        isVeg: item.isVeg ?? false,
-        rating: Number(item.rating) || 0,
-      }));
+      const normalized = Array.isArray(food)
+        ? food.map((item: any) => ({
+            ...item,
+            isVeg: item.isVeg ?? false,
+            rating: Number(item.rating) || 0,
+          }))
+        : [];
       dispatch(setFoods(normalized));
     };
 
@@ -59,7 +63,7 @@ const FoodList = ({ filters }: FoodListProps) => {
     }
   }, [filters, dispatch]);
 
-  if (foodItems.length === 0) {
+  if (loading) {
     return (
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 place-items-center  mt-4 relative">
         {Array.from({ length: 6 }).map((_, i) => (
@@ -77,14 +81,6 @@ const FoodList = ({ filters }: FoodListProps) => {
       </div>
     );
   }
-
-  // if (foodItems.length === 0) {
-  //   return (
-  //     <div className="flex items-center justify-center font-bold text-gray-500 text-xl mt-6">
-  //       We don't have any item right now.
-  //     </div>
-  //   );
-  // }
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 p-2 place-items-center m-2">

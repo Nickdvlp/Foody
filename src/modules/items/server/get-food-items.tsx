@@ -2,6 +2,7 @@
 
 import { db } from "@/db";
 import { foodItemsTable, usersTable } from "@/db/schema";
+import { redis } from "@/lib/redis";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
@@ -10,11 +11,9 @@ interface GetFoodItemsProps {
 }
 
 export const getFoodItems = async ({ restaurantId }: GetFoodItemsProps) => {
-  // Check authentication
   const { userId: clerkId } = await auth();
   if (!clerkId) throw new Error("Unauthorized");
 
-  // Find the user
   const [user] = await db
     .select()
     .from(usersTable)
@@ -23,11 +22,10 @@ export const getFoodItems = async ({ restaurantId }: GetFoodItemsProps) => {
 
   if (!restaurantId) throw new Error("Restaurant ID is required");
 
-  // Fetch food items for the restaurant
   const foodItems = await db
     .select()
     .from(foodItemsTable)
     .where(eq(foodItemsTable.restaurantId, restaurantId));
 
-  return foodItems; // ✅ return the array of food items
+  return foodItems;
 };

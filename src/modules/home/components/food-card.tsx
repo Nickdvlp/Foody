@@ -30,11 +30,12 @@ const FoodCard = ({ food }: { food: Food }) => {
   const addItemToCart = async () => {
     try {
       setIsLoading(true);
-      await dispatch(addCartItemAsync(food.id));
+      await dispatch(addCartItemAsync(food.id)).unwrap();
 
       toast.success("item added to cart");
     } catch (error) {
-      toast.error("Failed to add item");
+      console.log(error);
+      toast.error(error as any);
     } finally {
       setIsLoading(false);
     }

@@ -29,10 +29,10 @@ import { updateRestaurant } from "@/modules/restaurant/server/update-restaurant"
 interface Restaurant {
   id: string;
   partnerId: string;
-  name: string | undefined;
-  address: string | undefined;
-  description: string | undefined;
-  imageUrl: string | undefined;
+  name: string | null | undefined;
+  address: string | null | undefined;
+  description: string | null | undefined;
+  imageUrl: string | null | undefined;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -51,7 +51,7 @@ const formSchema = z.object({
 });
 
 interface EditItemProps {
-  restaurant: Restaurant | null;
+  restaurant: Restaurant | undefined;
   onSuccess: () => void;
 }
 
@@ -61,10 +61,10 @@ export function EditRestaurant({ restaurant, onSuccess }: EditItemProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      imageUrl: restaurant?.imageUrl,
-      name: restaurant?.name,
-      address: restaurant?.address,
-      description: restaurant?.description,
+      imageUrl: restaurant?.imageUrl ?? "",
+      name: restaurant?.name ?? "",
+      address: restaurant?.address ?? "",
+      description: restaurant?.description ?? "",
     },
   });
 

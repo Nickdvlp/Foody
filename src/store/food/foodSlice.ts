@@ -26,21 +26,27 @@ interface FoodState {
   foods: Food[];
   filteredFoods: Food[];
   searchQuery: string;
+  loading: boolean;
 }
 
 const initialState: FoodState = {
   foods: [],
   filteredFoods: [],
   searchQuery: "",
+  loading: false,
 };
 
 export const foodSlice = createSlice({
   name: "food",
   initialState,
   reducers: {
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
     setFoods: (state, action: PayloadAction<Food[]>) => {
       state.foods = action.payload;
-      state.filteredFoods = action.payload; // initialize
+      state.filteredFoods = action.payload;
+      state.loading = false;
     },
 
     setSearchQuery: (state, action: PayloadAction<string>) => {
@@ -78,5 +84,6 @@ export const foodSlice = createSlice({
   },
 });
 
-export const { setFoods, setSearchQuery, filteredFood } = foodSlice.actions;
+export const { setFoods, setLoading, setSearchQuery, filteredFood } =
+  foodSlice.actions;
 export default foodSlice.reducer;

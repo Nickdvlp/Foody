@@ -33,6 +33,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { EditRestaurant } from "@/modals/edit-restaurant";
 import { DeleteRestaurant } from "@/modals/delete-restaurant";
+import Link from "next/link";
 
 export interface Restaurant {
   id: string;
@@ -68,7 +69,6 @@ const RestaurantView = ({ restaurantId }: RestaurantsViewProps) => {
       const data = await getOrdersSeen();
       const unseenExists = data.some((order) => order.isSeen === false);
       setHasUnseenOrders(unseenExists);
-      console.log(unseenExists);
     };
     fetchOrdersIsSeen();
   }, [restaurantId]);
@@ -77,6 +77,20 @@ const RestaurantView = ({ restaurantId }: RestaurantsViewProps) => {
     await updateOrdersIsSeen({ restaurantId });
     redirect(`/manage-orders/${restaurantId}`);
   };
+
+  if (!restaurant) {
+    return (
+      <div className="flex items-center justify-center h-screen text-lg font-semibold flex-col">
+        Restaurant not found 😴
+        <Link
+          href={"/"}
+          className="bg-orange-600 text-white p-1 rounded-lg px-4 mt-2"
+        >
+          Home
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="my-3 md:min-w-lg mx-3 p-3 shadow-xl rounded-2xl border border-gray-200">

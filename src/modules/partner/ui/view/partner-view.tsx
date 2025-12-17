@@ -23,7 +23,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { redirect } from "next/navigation";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog } from "@/components/ui/dialog";
 import { EditPartner } from "@/modals/edit-partner";
 import { DialogContent } from "@radix-ui/react-dialog";
 import { DeletePartner } from "@/modals/delete-partner";
@@ -33,8 +33,6 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/store";
 import { storePartner } from "@/store/partner/partnerSlice";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Tooltip } from "@/components/ui/tooltip";
-import { TooltipContent } from "@radix-ui/react-tooltip";
 
 export interface Partner {
   id: string;
@@ -83,7 +81,6 @@ const PartnerView = ({ partnerId }: PartnerViewProps) => {
           <SidebarTrigger />
         </div>
         <div className="relative w-full max-w-4xl bg-transparent  p-8 md:p-10 flex flex-col md:flex-row items-center md:items-start gap-8 transition-all">
-          {/* Dropdown Menu (top right) */}
           <div className="absolute top-4 right-4">
             <DropdownMenu modal={false}>
               <DropdownMenuTrigger className="text-gray-600 hover:text-gray-800 transition">

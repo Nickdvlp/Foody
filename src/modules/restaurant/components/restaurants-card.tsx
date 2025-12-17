@@ -38,7 +38,6 @@ const RestaurantsCard = ({ partnerId }: RestaurantsCardProps) => {
     fetchAllRestaurants();
   }, [partnerId]);
 
-  // ✅ Loading State
   if (restaurants === null) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -46,8 +45,6 @@ const RestaurantsCard = ({ partnerId }: RestaurantsCardProps) => {
       </div>
     );
   }
-
-  // ✅ Empty State
   if (restaurants.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center h-80 text-center">

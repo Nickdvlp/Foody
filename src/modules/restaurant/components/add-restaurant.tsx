@@ -30,6 +30,7 @@ import { createRestaurant } from "../server/create-restaurant";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import toast from "react-hot-toast";
 
 interface AddRestaurantProps {
   partnerId: string;
@@ -65,9 +66,10 @@ function AddRestaurant({ partnerId }: AddRestaurantProps) {
     try {
       setIsLoading(true);
       const restaurantId = await createRestaurant({ values, partnerId });
-      console.log("restaurant created", restaurantId);
+      toast.success("restaurant created");
       router.push(`/restaurant-view/${restaurantId}`);
     } catch (error) {
+      toast.error("Something went wrong");
       console.log(error);
     } finally {
       setIsLoading(false);

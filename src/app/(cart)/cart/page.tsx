@@ -15,7 +15,7 @@ import { getEntireCartItems } from "@/modules/cart/server/get-entire-cart-items"
 import { redirect } from "next/navigation";
 import { Skeleton } from "@/components/ui/skeleton";
 
-interface EntireCartItems {
+export interface EntireCartItems {
   id: string;
   quantity: number;
   createdAt: Date | null;

@@ -2,8 +2,10 @@
 
 import { db } from "@/db";
 import { restaurantTable } from "@/db/schema";
+import { redis } from "@/lib/redis";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
+import { Restaurants } from "../components/restaurants-card";
 
 interface getAllRestaurantsProps {
   partnerId: string;
@@ -11,16 +13,32 @@ interface getAllRestaurantsProps {
 export const getAllRestaurants = async ({
   partnerId,
 }: getAllRestaurantsProps) => {
-  const { userId: clerkId } = await auth();
+  try {
+    const { userId: clerkId } = await auth();
 
-  if (!clerkId) {
-    throw new Error("Unauthorized");
+    if (!clerkId) {
+      throw new Error("Unauthorized");
+    }
+
+    const getRestaurantsCachedKey = `restaurants:${partnerId}`;
+
+    const cached = await redis.get(getRestaurantsCachedKey);
+
+    if (cached) {
+      return cached as Restaurants[];
+    }
+    const restaurants = await db
+      .select()
+      .from(restaurantTable)
+      .where(eq(restaurantTable.partnerId, partnerId));
+
+    await redis.set(getRestaurantsCachedKey, restaurants, { ex: 120 });
+    return restaurants;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(error.message);
+    } else {
+      throw new Error("Something went wrong");
+    }
   }
-
-  const restaurants = await db
-    .select()
-    .from(restaurantTable)
-    .where(eq(restaurantTable.partnerId, partnerId));
-
-  return restaurants;
 };

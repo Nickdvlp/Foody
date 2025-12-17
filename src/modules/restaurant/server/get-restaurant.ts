@@ -24,6 +24,10 @@ export const getRestaurant = async ({ restaurantId }: getRestaurantProps) => {
   if (!user) {
     throw new Error("User not found");
   }
+
+  if (!restaurantId) {
+    throw new Error("Restaurant not found");
+  }
   const [restaurant] = await db
     .select()
     .from(restaurantTable)
