@@ -11,7 +11,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,7 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { createPartner } from "@/modules/partner/server/create-partner";
+
 import Uploader from "@/modules/partner/ui/uploader";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -51,7 +50,7 @@ const formSchema = z.object({
 
 function AddRestaurant({ partnerId }: AddRestaurantProps) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

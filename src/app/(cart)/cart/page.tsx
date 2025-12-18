@@ -67,7 +67,7 @@ const CartPage = () => {
   };
 
   const total = cartItemsWithDetails?.reduce((sum, item) => {
-    const price = (item as any).price || 0;
+    const price = parseFloat(item.price || "0");
     return sum + price * item.quantity;
   }, 0);
 
@@ -107,18 +107,18 @@ const CartPage = () => {
             >
               <div className="flex items-center gap-4">
                 <Image
-                  src={(item as any).image || "/placeholder.jpg"}
-                  alt={(item as any).name || "Food Item"}
+                  src={item.image || "/placeholder.jpg"}
+                  alt={item.name || "Food Item"}
                   width={70}
                   height={70}
                   className="rounded-lg object-cover"
                 />
                 <div>
                   <h2 className="font-semibold text-lg">
-                    {(item as any).name || "Unnamed Item"}
+                    {item.name || "Unnamed Item"}
                   </h2>
                   <p className="text-sm text-gray-500">
-                    ₹{(item as any).price || 0} × {item.quantity}
+                    ₹{item.price || 0} × {item.quantity}
                   </p>
                 </div>
               </div>

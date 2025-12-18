@@ -1,5 +1,3 @@
-import { getOrdersByRestaurant } from "@/modules/order/server/get-orders-by-restaurant";
-
 import OrderStatusUpdate from "@/modals/order-status-update";
 
 interface OrderStatusUpdateProps {
@@ -8,14 +6,14 @@ interface OrderStatusUpdateProps {
   }>;
 }
 
-interface Order {
-  id: string;
-  orderId: string;
-  foodId: string;
-  restaurantId: string;
-  quantity: number;
-  price: string;
-}
+// interface Order {
+//   id: string;
+//   orderId: string;
+//   foodId: string;
+//   restaurantId: string;
+//   quantity: number;
+//   price: string;
+// }
 
 // const orderStatusOptions = [
 //   "Placed",

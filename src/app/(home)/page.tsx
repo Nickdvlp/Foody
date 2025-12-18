@@ -1,15 +1,12 @@
 "use client";
-import FullScreenLoader from "@/components/ui/full-screen-loader";
+
 import AIAssistant from "@/modules/home/components/ai-assistant";
 import FilterList from "@/modules/home/components/filter-list";
 import FoodList from "@/modules/home/components/food-list";
 import TopRatedButton from "@/modules/home/components/top-rated-button";
 import HomeCarousel from "@/modules/home/ui/home-carousel";
-import { RootState } from "@/store";
-import { setLoading } from "@/store/food/foodSlice";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+
+import { useState } from "react";
 
 export interface Filter {
   selectedCategories: string[];
