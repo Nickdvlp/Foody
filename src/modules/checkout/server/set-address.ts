@@ -2,10 +2,8 @@
 
 import { db } from "@/db";
 import { addressesTable } from "@/db/schema";
-import { getGeoCode } from "@/utils/getGeoCode";
+
 import { auth } from "@clerk/nextjs/server";
-import { eq } from "drizzle-orm";
-import { success } from "zod";
 
 interface setAddressProps {
   values: {
@@ -25,7 +23,7 @@ export const setAddress = async ({ values }: setAddressProps) => {
     throw new Error("User not authenticated");
   }
 
-  const [newAddress] = await db
+  await db
     .insert(addressesTable)
     .values({
       userId,

@@ -50,7 +50,7 @@ const OrderTrackView = ({ orderId }: OrderTrackViewProps) => {
       setAddresses(pos);
     };
     fetchTrackingAddresses();
-  }, []);
+  }, [setAddresses]);
 
   return (
     <div>

@@ -1,11 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import {
-  partnerTable,
-  ratingsReviewsTable,
-  restaurantTable,
-} from "@/db/schema";
+import { ratingsReviewsTable } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 

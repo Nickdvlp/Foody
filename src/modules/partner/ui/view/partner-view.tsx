@@ -3,17 +3,7 @@
 import { useEffect, useState } from "react";
 import { getPartner } from "../../server/get-partner";
 import { Button } from "@/components/ui/button";
-import {
-  Edit,
-  List,
-  Loader2,
-  MenuIcon,
-  Plus,
-  Trash2,
-  MapPin,
-  Menu,
-  Megaphone,
-} from "lucide-react";
+import { Edit, Loader2, MenuIcon, Plus, Trash2, MapPin } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,

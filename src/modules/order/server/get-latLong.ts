@@ -1,6 +1,5 @@
 "use server";
 
-import { db } from "@/db";
 import { getGeoCode } from "@/utils/getGeoCode";
 
 interface getLatLongProps {

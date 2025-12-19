@@ -1,16 +1,12 @@
 "use client";
 
-import { Filter } from "@/app/(home)/page";
 import { Button } from "@/components/ui/button";
 import { Star } from "lucide-react";
-import React, { useState } from "react";
+import React from "react";
 import { getTopRatedItems } from "../server/get-top-rated";
 
-// interface topRatedButtonProps {
-//   setFilters: (Filter: Filter | null) => void;
-// }
 const TopRatedButton = () => {
-  const [topRatedItems, setTopRatedItems] = useState(null);
+  // const [topRatedItems, setTopRatedItems] = useState(null);
 
   const handleTopRated = async () => {
     const data = await getTopRatedItems();

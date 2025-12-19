@@ -2,7 +2,6 @@
 
 import { db } from "@/db";
 import { foodItemsTable, usersTable } from "@/db/schema";
-import { redis } from "@/lib/redis";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 

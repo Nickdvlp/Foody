@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { SearchIcon } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { setFoods, setSearchQuery } from "@/store/food/foodSlice";
+import { setSearchQuery } from "@/store/food/foodSlice";
 
 interface SearchBarProps {
   isMobile: boolean;

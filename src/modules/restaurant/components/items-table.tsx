@@ -101,8 +101,8 @@ const ItemsTable = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {foodItems?.map((item) => (
-            <TableRow>
+          {foodItems?.map((item, i) => (
+            <TableRow key={i}>
               <TableCell>
                 <Image
                   src={item.imageUrl ? item.imageUrl : "/icon.png"}

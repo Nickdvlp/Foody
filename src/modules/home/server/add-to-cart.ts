@@ -63,7 +63,7 @@ export const addToCart = async ({ itemId }: addToCartProps) => {
     }
 
     return cartItem;
-  } catch (error: any) {
+  } catch (error) {
     throw error;
   }
 };

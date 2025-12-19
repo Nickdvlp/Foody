@@ -6,10 +6,10 @@ import {
 } from "@/components/ui/tooltip";
 import Image from "next/image";
 
-import toast, { Toaster } from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import { addCartItemAsync } from "@/store/cart/cartSlice";
-import { AppDispatch, RootState } from "@/store";
+import { AppDispatch } from "@/store";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 interface Food {
@@ -33,9 +33,11 @@ const FoodCard = ({ food }: { food: Food }) => {
       await dispatch(addCartItemAsync(food.id)).unwrap();
 
       toast.success("item added to cart");
-    } catch (error) {
+    } catch (error: unknown) {
       console.log(error);
-      toast.error(error as any);
+      toast.error(
+        error instanceof Error ? error.message : "Something went wrong"
+      );
     } finally {
       setIsLoading(false);
     }

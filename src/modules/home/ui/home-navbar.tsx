@@ -41,7 +41,7 @@ const HomeNavbar = () => {
       );
     };
     fetchCartItems();
-  }, [isLoaded, user]);
+  }, [isLoaded, user, dispatch]);
 
   const totalQuantity = cartItems?.reduce(
     (acc: number, curr: Cart) => acc + curr.quantity,

@@ -19,9 +19,6 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { setAddress } from "@/modules/checkout/server/set-address";
-import { createItems } from "@/modules/items/server/create-items";
-
-import Uploader from "@/modules/partner/ui/uploader";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
@@ -59,7 +56,7 @@ const formSchema = z.object({
 
 interface AddAddressProps {
   closeDialog: () => void;
-  setUpdateAddressList: (val: any) => void;
+  setUpdateAddressList: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export function AddAddress({
@@ -82,7 +79,7 @@ export function AddAddress({
     setLoading(true);
     await setAddress({ values });
     setLoading(false);
-    setUpdateAddressList((prev: any) => prev + 1);
+    setUpdateAddressList((prev) => prev + 1);
     closeDialog();
     toast.success("address created successfully.");
     form.reset();

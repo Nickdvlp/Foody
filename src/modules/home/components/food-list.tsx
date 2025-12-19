@@ -9,9 +9,8 @@ import { filteredFood, setLoading } from "@/store/food/foodSlice";
 import { setFoods } from "@/store/food/foodSlice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Loader2 } from "lucide-react";
-import Image from "next/image";
 
-interface Food {
+export interface Food {
   id: string;
   name: string;
   description: string;
@@ -45,7 +44,7 @@ const FoodList = ({ filters }: FoodListProps) => {
       dispatch(setLoading(true));
       const food = await FetchFood();
       const normalized = Array.isArray(food)
-        ? food.map((item: any) => ({
+        ? food.map((item) => ({
             ...item,
             isVeg: item.isVeg ?? false,
             rating: Number(item.rating) || 0,
@@ -55,7 +54,7 @@ const FoodList = ({ filters }: FoodListProps) => {
     };
 
     fetchfood();
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (filters) {

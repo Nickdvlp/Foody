@@ -266,7 +266,7 @@ export default function CheckoutPage({ restaurantId }: CheckoutPageProps) {
               ) : (
                 <div className="text-center py-6">
                   <p className="text-gray-500 mb-3">
-                    You haven't added an address yet
+                    You have not added an address yet
                   </p>
                   <Button
                     onClick={() => setDialogOpen(true)}

@@ -6,7 +6,6 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Bell,
-  Dot,
   Edit,
   Loader2,
   Menu,
@@ -18,7 +17,7 @@ import ItemsTable from "../components/items-table";
 
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { AddItems } from "@/modals/add-items";
-import OrderStatusUpdate from "@/modals/order-status-update";
+
 import { redirect } from "next/navigation";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { getOrdersSeen } from "@/modules/order/server/get-orders-seen";

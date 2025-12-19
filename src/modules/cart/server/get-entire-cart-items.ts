@@ -1,9 +1,8 @@
 "use server";
 
-import { EntireCartItems } from "@/app/(cart)/cart/page";
 import { db } from "@/db";
 import { cartItemsTable, foodItemsTable } from "@/db/schema";
-import { redis } from "@/lib/redis";
+
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 
@@ -38,6 +37,7 @@ export const getEntireCartItems = async () => {
 
     return cartWithItems;
   } catch (error) {
+    console.log(error);
     throw new Error("Something went wrong");
   }
 };

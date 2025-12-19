@@ -22,6 +22,7 @@ export async function fetchPartner(userId: string) {
     await redis.set(partnerCachedKey, data[0], { ex: 120 });
     return data[0] || null;
   } catch (error) {
+    console.log(error);
     throw new Error("Something went wrong");
   }
 }

@@ -12,7 +12,7 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-import { updateOrderStatus } from "@/modules/order/server/update-order-status";
+
 import toast from "react-hot-toast";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 
@@ -56,7 +56,6 @@ const OrderStatusUpdate = ({ restaurantId }: OrderStatusUpdateProps) => {
       if (!restaurantId) return;
       const data = await getOrdersByRestaurant({ restaurantId });
       setOrders(data);
-      console.log(data);
     };
     fetchOrdersByRestaurant();
   }, [restaurantId]);

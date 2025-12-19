@@ -1,9 +1,9 @@
 "use server";
 
 import { db } from "@/db";
-import { ordersTable, orderItemsTable } from "@/db/schema";
+import { ordersTable } from "@/db/schema";
 import { auth } from "@clerk/nextjs/server";
-import { eq, inArray } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 export const updateOrdersIsSeen = async ({
   restaurantId,

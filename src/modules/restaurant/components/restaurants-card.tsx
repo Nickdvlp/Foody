@@ -52,7 +52,7 @@ const RestaurantsCard = ({ partnerId }: RestaurantsCardProps) => {
           Create Your First Restaurant 🍽️
         </h2>
         <p className="text-gray-600 mb-5 max-w-md">
-          You haven't added any restaurants yet. Start by creating one to add
+          You have not added any restaurants yet. Start by creating one to add
           your delicious dishes!
         </p>
         <Button
