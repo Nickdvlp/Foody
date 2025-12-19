@@ -11,7 +11,6 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -22,7 +21,6 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { createPartner } from "@/modules/partner/server/create-partner";
 import Uploader from "@/modules/partner/ui/uploader";
 import { useUser } from "@clerk/nextjs";
-// import { setPartner } from "@/store/partner/partnerSlice";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -49,7 +47,7 @@ const formSchema = z.object({
 
 function Page() {
   const { user } = useUser();
-  const [isLoading, setIsLoading] = useState<Boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

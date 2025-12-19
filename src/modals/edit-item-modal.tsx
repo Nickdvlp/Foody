@@ -21,10 +21,11 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import Uploader from "@/modules/partner/ui/uploader";
 import { updateItem } from "@/modules/items/server/update-item";
+import { FoodItem } from "@/modules/restaurant/components/items-table";
 
 const formSchema = z.object({
   imageUrl: z.string().url({ message: "Please upload an image." }),
@@ -41,7 +42,7 @@ const formSchema = z.object({
 });
 
 interface EditItemProps {
-  item: any;
+  item: FoodItem;
   onSuccess: () => void;
 }
 

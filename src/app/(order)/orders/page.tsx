@@ -17,26 +17,41 @@ import toast from "react-hot-toast";
 
 interface OrderItem {
   id: string;
-  itemId: string;
-  name: string;
-  price: string;
   quantity: number;
-  image: string;
-  restaurantId: string;
-  createdAt: string;
-  updatedAt: string;
+  price: string;
+
+  food: {
+    id: string;
+    name: string;
+    imageUrl: string | null;
+    price: string;
+  } | null;
+
+  restaurant: {
+    id: string;
+    name: string;
+    imageUrl: string | null;
+    address: string | null;
+  } | null;
 }
 
 export interface Order {
   id: string;
   userId: string;
   addressId: string;
+  restaurantId: string;
+  isSeen: boolean | null;
   items: OrderItem[];
   totalAmount: number;
   orderStatus: string;
   paymentMethod: string;
   paymentStatus: string | null;
-  createdAt: string;
+  createdAt: Date | null;
+}
+
+interface SelectedOrder extends Order {
+  restaurantId: string;
+  restaurantName: string;
 }
 
 const OrderPage = () => {
@@ -46,7 +61,9 @@ const OrderPage = () => {
   const [orderStatus, setOrderStatus] = useState("Placed");
   const [openRatingCard, setOpenRatingCard] = useState(false);
 
-  const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  const [selectedOrder, setSelectedOrder] = useState<SelectedOrder | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -94,8 +111,8 @@ const OrderPage = () => {
     const res = await submitRatingsAndReviews({
       rating,
       review,
-      restaurantId: selectedOrder.restaurantId,
-      orderId: selectedOrder.id,
+      restaurantId: selectedOrder?.restaurantId,
+      orderId: selectedOrder?.id,
     });
 
     if (res.success === false) {
@@ -150,7 +167,10 @@ const OrderPage = () => {
                 <span className="font-semibold">₹{order.totalAmount}</span>
               </p>
               <p className="text-gray-500 text-sm">
-                Ordered At: {new Date(order.createdAt).toLocaleString()}
+                Ordered At:{" "}
+                {order?.createdAt
+                  ? new Date(order.createdAt).toLocaleString()
+                  : "N/A"}
               </p>
 
               <Separator className="my-2" />
@@ -160,7 +180,11 @@ const OrderPage = () => {
                   className="border border-yellow-400 w-fit p-2 rounded-2xl text-yellow-700 px-4 bg-yellow-200 hover:scale-105"
                   onClick={(e) => {
                     e.stopPropagation();
-                    setSelectedOrder(order);
+                    setSelectedOrder({
+                      ...order,
+                      restaurantId: order.items[0]?.restaurant?.id || "",
+                      restaurantName: "",
+                    });
                     setOpenRatingCard(true);
                   }}
                 >
@@ -169,7 +193,7 @@ const OrderPage = () => {
               )}
 
               <div className="space-y-3">
-                {order.items.map((item: any) => (
+                {order.items.map((item) => (
                   <div
                     key={item.id}
                     className="flex justify-between items-center p-2 border rounded-lg"
@@ -177,19 +201,19 @@ const OrderPage = () => {
                     <div>
                       <div className="flex items-center gap-3">
                         <img
-                          src={item.food.imageUrl}
-                          alt={item.food.name}
+                          src={item.food?.imageUrl || "/placeholder.png"}
+                          alt={item.food?.name}
                           className="w-16 h-16 object-cover rounded-lg"
                         />
                         <div className="flex flex-col">
                           <p className="font-medium text-gray-800">
-                            {item.food.name}
+                            {item?.food?.name}
                           </p>
                           <p className="text-sm text-gray-600">
                             Qty: {item.quantity}
                           </p>
                           <p className="text-sm text-gray-600">
-                            Price: ₹{item.food.price}
+                            Price: ₹{item?.food?.price}
                           </p>
                         </div>
                       </div>

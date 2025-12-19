@@ -9,8 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { deletePartner } from "@/modules/partner/server/delete-partner";
-import { Partner } from "@/modules/partner/ui/view/partner-view";
+
 import { deleteRestaurant } from "@/modules/restaurant/server/delete-restaurant";
 import { Restaurant } from "@/modules/restaurant/views/restaurant-view";
 import { useRouter } from "next/navigation";

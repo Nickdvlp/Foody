@@ -12,8 +12,8 @@ import { eq } from "drizzle-orm";
 interface submitRatingsAndReviewsProps {
   rating: number;
   review: string;
-  restaurantId: string;
-  orderId: string;
+  restaurantId: string | undefined;
+  orderId: string | undefined;
 }
 
 export const submitRatingsAndReviews = async ({
@@ -26,6 +26,10 @@ export const submitRatingsAndReviews = async ({
 
   if (!userId) {
     throw new Error("unauthorized");
+  }
+
+  if (!restaurantId || !orderId) {
+    throw new Error("Restaurant Id or Order Id does not exist");
   }
 
   const existing = await db

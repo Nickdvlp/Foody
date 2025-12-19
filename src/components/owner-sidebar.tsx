@@ -13,7 +13,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "./ui/sidebar";
-import { Home, PlusCircle, ListOrdered, Settings, LogOut } from "lucide-react";
+import { Home, PlusCircle, Settings } from "lucide-react";
 import AuthButton from "@/modules/auth/ui/auth-button";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store";

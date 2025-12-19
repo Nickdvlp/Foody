@@ -50,7 +50,7 @@ interface addItemsProps {
 }
 
 export function AddItems({ restaurantId, onSuccess }: addItemsProps) {
-  const [loading, setLoading] = useState<Boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

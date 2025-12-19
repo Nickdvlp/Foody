@@ -25,7 +25,6 @@ interface OrderCancelProps {
 const OrderCancel = ({
   open,
   onOpenChange,
-  orders,
   setOrders,
   orderId,
 }: OrderCancelProps) => {

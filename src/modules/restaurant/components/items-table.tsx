@@ -30,7 +30,7 @@ interface ItemsTableProps {
   setRefreshItemsTable: (value: number) => void;
 }
 
-interface FoodItem {
+export interface FoodItem {
   id: string;
   name: string;
   restaurantId: string;

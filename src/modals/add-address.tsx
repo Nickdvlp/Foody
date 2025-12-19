@@ -66,7 +66,7 @@ export function AddAddress({
   closeDialog,
   setUpdateAddressList,
 }: AddAddressProps) {
-  const [loading, setLoading] = useState<Boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
