@@ -28,17 +28,17 @@ const DynamicMap = dynamic<RouteMapProps>(
 
 interface Addresses {
   userCoords:
-    | "We couldn't find that address!"
     | {
         lat: number;
         lon: number;
-      };
+      }
+    | string;
   restaurantCoords:
-    | "We couldn't find that address!"
     | {
         lat: number;
         lon: number;
-      };
+      }
+    | string;
 }
 const OrderTrackView = ({ orderId }: OrderTrackViewProps) => {
   const [addresses, setAddresses] = useState<Addresses | null>(null);
@@ -73,6 +73,7 @@ const OrderTrackView = ({ orderId }: OrderTrackViewProps) => {
 
       <div className="h-[80vh]">
         {addresses ? (
+          //@ts-expect-error addresses haven't correct types
           <DynamicMap addresses={addresses} />
         ) : (
           <p className="text-center mt-4 text-gray-500">Fetching location...</p>

@@ -46,7 +46,7 @@ export const createItems = async ({
     imageUrl: values.imageUrl,
     name: values.name,
     description: values.description,
-    price: Number(values.price),
+    price: values.price,
     preparationTime: Number(values.preparationTime),
     ingredients: splittedIngredients,
     category: values.category,
