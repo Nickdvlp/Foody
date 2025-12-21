@@ -3,10 +3,6 @@ import { usersTable } from "@/db/schema";
 import { verifyWebhook } from "@clerk/nextjs/webhooks";
 import { NextRequest } from "next/server";
 
-/**
- * 🔑 IMPORTANT:
- * Prevent Next.js from executing this route during build
- */
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
