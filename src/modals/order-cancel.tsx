@@ -18,7 +18,7 @@ interface OrderCancelProps {
   open: boolean;
   onOpenChange: (val: boolean) => void;
   orders: Order[] | null;
-  setOrders: (value: []) => void;
+  setOrders: (value: Order[]) => void;
   orderId: string;
 }
 
