@@ -195,7 +195,7 @@ export default function CheckoutPage({ restaurantId }: CheckoutPageProps) {
         theme: { color: "#f97316" },
       };
 
-      //@ts-ignore
+      //@ts-expect-error
       const razorpay = new window.Razorpay(options);
       razorpay.open();
 
