@@ -1,4 +1,4 @@
-import { real } from "drizzle-orm/gel-core";
+import { real } from "drizzle-orm/pg-core";
 import {
   boolean,
   numeric,
