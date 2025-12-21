@@ -195,7 +195,7 @@ export default function CheckoutPage({ restaurantId }: CheckoutPageProps) {
         theme: { color: "#f97316" },
       };
 
-      //@ts-expect-error
+      // @ts-expect-error Razorpay is injected at runtime
       const razorpay = new window.Razorpay(options);
       razorpay.open();
 
