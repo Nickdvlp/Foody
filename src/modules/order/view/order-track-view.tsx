@@ -30,14 +30,14 @@ interface Addresses {
   userCoords:
     | "We couldn't find that address!"
     | {
-        lat: any;
-        lon: any;
+        lat: number;
+        lon: number;
       };
   restaurantCoords:
     | "We couldn't find that address!"
     | {
-        lat: any;
-        lon: any;
+        lat: number;
+        lon: number;
       };
 }
 const OrderTrackView = ({ orderId }: OrderTrackViewProps) => {

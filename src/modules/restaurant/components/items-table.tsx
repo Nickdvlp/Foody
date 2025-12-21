@@ -87,7 +87,7 @@ const ItemsTable = ({
   return (
     <div>
       <Table>
-        <TableCaption>A list of your restaurant's food items </TableCaption>
+        <TableCaption>A list of food items of restaurant.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead></TableHead>

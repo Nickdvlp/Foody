@@ -14,6 +14,7 @@ import { redirect } from "next/navigation";
 import { RatingDialog } from "@/modals/rating-modal";
 import { submitRatingsAndReviews } from "@/modules/restaurant/server/ratings-reviews";
 import toast from "react-hot-toast";
+import Image from "next/image";
 
 interface OrderItem {
   id: string;
@@ -64,6 +65,7 @@ const OrderPage = () => {
   const [selectedOrder, setSelectedOrder] = useState<SelectedOrder | null>(
     null
   );
+  console.log(orderStatus);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -200,10 +202,12 @@ const OrderPage = () => {
                   >
                     <div>
                       <div className="flex items-center gap-3">
-                        <img
+                        <Image
                           src={item.food?.imageUrl || "/placeholder.png"}
-                          alt={item.food?.name}
+                          alt={item.food?.name || "Image"}
                           className="w-16 h-16 object-cover rounded-lg"
+                          width={100}
+                          height={100}
                         />
                         <div className="flex flex-col">
                           <p className="font-medium text-gray-800">

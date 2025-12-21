@@ -11,18 +11,19 @@ import { useUser } from "@clerk/nextjs";
 import { getCartItems } from "@/modules/cart/server/get-cart-items";
 import { useDispatch, useSelector } from "react-redux";
 import { setCartItems } from "@/store/cart/cartSlice";
+import { RootState } from "@/store";
 
-interface Cart {
-  id: string;
-  userId: string;
-  itemId: string;
-  quantity: number;
-  createdAt: Date | null;
-  updatedAt: Date | null;
-}
+// interface Cart {
+//   id: string;
+//   userId: string;
+//   itemId: string;
+//   quantity: number;
+//   createdAt: Date | null;
+//   updatedAt: Date | null;
+// }
 const HomeNavbar = () => {
   const [IsMobileNavbarOpen, setIsMobileNavbarOpen] = useState(false);
-  const cartItems = useSelector((state: any) => state.cart.items);
+  const cartItems = useSelector((state: RootState) => state.cart.items);
   const { user, isLoaded } = useUser();
   const dispatch = useDispatch();
 
@@ -43,10 +44,8 @@ const HomeNavbar = () => {
     fetchCartItems();
   }, [isLoaded, user, dispatch]);
 
-  const totalQuantity = cartItems?.reduce(
-    (acc: number, curr: Cart) => acc + curr.quantity,
-    0
-  );
+  const totalQuantity =
+    cartItems?.reduce((acc: number, curr) => acc + curr.quantity, 0) ?? 0;
 
   return (
     <div className="fixed left-0 right-0 top-0 border border-gray-200 border-t-0 rounded-2xl rounded-t-none z-50 flex items-center justify-between gap-4 px-4 py-3 mx-4 shadow-xl h-[4rem] bg-white">

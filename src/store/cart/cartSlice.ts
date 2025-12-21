@@ -31,8 +31,11 @@ export const addCartItemAsync = createAsyncThunk(
     try {
       const res = await addToCart({ itemId });
       return res;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("Something went wrong");
     }
   }
 );
@@ -42,8 +45,11 @@ export const removeCartItemAsync = createAsyncThunk(
     try {
       await removeCartItem({ itemId });
       return itemId;
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("Something went wrong");
     }
   }
 );
@@ -54,8 +60,11 @@ export const clearCartItemAsync = createAsyncThunk(
     try {
       await clearCartItems();
       return { success: true, message: "Cart cleared successfully." };
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("Something went wrong");
     }
   }
 );
@@ -69,8 +78,11 @@ export const updateCartItemAsync = createAsyncThunk(
     try {
       await updateCartItem({ itemId, quantity });
       return { itemId, quantity };
-    } catch (error: any) {
-      return rejectWithValue(error.message);
+    } catch (error) {
+      if (error instanceof Error) {
+        return rejectWithValue(error.message);
+      }
+      return rejectWithValue("Something went wrong");
     }
   }
 );
@@ -104,7 +116,7 @@ const cartSlice = createSlice({
           state.items.push({
             id: crypto.randomUUID(),
             itemId: action.meta.arg,
-            userId: "temp", // or replace with actual userId if available
+            userId: "temp",
             quantity: 1,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),

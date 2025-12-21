@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "ngrok": "npx ngrok http --domain=contemporaneous-squamously-leopoldo.ngrok-free.app 3000",
     "dev:all": "concurrently \"npm run dev\" \"npm run ngrok\"",
-    "build": "NEXT_DISABLE_TURBOPACK=1 next build",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },

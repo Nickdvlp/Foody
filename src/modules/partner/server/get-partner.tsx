@@ -37,7 +37,8 @@ export const getPartner = async ({ partnerId }: getPartnerProps) => {
 
     await redis.set(getPartnerCachedKey, partner, { ex: 120 });
     return partner;
-  } catch (error: any) {
-    throw new Error(error);
+  } catch (error) {
+    console.log(error);
+    throw new Error("Something went wrong");
   }
 };

@@ -1,5 +1,11 @@
 "use client";
 
+declare global {
+  interface Window {
+    Razorpay: unknown;
+  }
+}
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -7,7 +13,6 @@ import {
   Dialog,
   DialogHeader,
   DialogContent,
-  DialogFooter,
   DialogTrigger,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -19,11 +24,7 @@ import { getAllAddresses } from "@/modules/checkout/server/get-all-addresses";
 import { setDefaultAddress } from "@/modules/checkout/server/set-default-address";
 import { createOrder } from "@/modules/order/server/create-order";
 import { AppDispatch } from "@/store";
-import {
-  clearCart,
-  clearCartItemAsync,
-  removeCartItemAsync,
-} from "@/store/cart/cartSlice";
+import { clearCartItemAsync } from "@/store/cart/cartSlice";
 import { redirect } from "next/navigation";
 
 import { useEffect, useState } from "react";
@@ -58,6 +59,12 @@ interface Address {
 
 interface CheckoutPageProps {
   restaurantId: string;
+}
+
+interface RazorpaySuccessResponse {
+  razorpay_payment_id: string;
+  razorpay_order_id: string;
+  razorpay_signature: string;
 }
 
 export default function CheckoutPage({ restaurantId }: CheckoutPageProps) {
@@ -95,7 +102,9 @@ export default function CheckoutPage({ restaurantId }: CheckoutPageProps) {
   }, [updateAddressList]);
 
   useEffect(() => {
-    if (!(window as any).Razorpay) {
+    if (typeof window === "undefined") return;
+
+    if (!("Razorpay" in window)) {
       const script = document.createElement("script");
       script.src = "https://checkout.razorpay.com/v1/checkout.js";
       script.async = true;
@@ -155,7 +164,7 @@ export default function CheckoutPage({ restaurantId }: CheckoutPageProps) {
         name: "foody",
         description: "this is payment from razorpay.",
         order_id: data.id,
-        handler: async function (response: any) {
+        handler: async function (response: RazorpaySuccessResponse) {
           console.log("Razorpay response", response);
 
           const verifyRes = await fetch("/api/razorpay/verify", {
@@ -186,7 +195,7 @@ export default function CheckoutPage({ restaurantId }: CheckoutPageProps) {
         theme: { color: "#f97316" },
       };
 
-      const razorpay = new (window as any).Razorpay(options);
+      const razorpay = new window.Razorpay(options);
       razorpay.open();
 
       toast.success("Proceeding to Razorpay payment!");

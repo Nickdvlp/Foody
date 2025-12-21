@@ -4,7 +4,16 @@ import { db } from "@/db";
 import { foodItemsTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 
-export async function updateItem(id: string, values: any) {
+interface updateItemProps {
+  imageUrl: string;
+  name: string;
+  description: string;
+  price: string;
+  preparationTime: string;
+  ingredients: string;
+  isAvailable: boolean;
+}
+export async function updateItem(id: string, values: updateItemProps) {
   await db
     .update(foodItemsTable)
     .set({
