@@ -1,3 +1,4 @@
+"use server";
 import { Redis } from "@upstash/redis";
 
 let redis: Redis | null = null;
