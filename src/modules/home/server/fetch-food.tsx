@@ -2,12 +2,11 @@
 
 import { db } from "@/db";
 import { foodItemsTable, restaurantTable } from "@/db/schema";
-import { getRealtime } from "@/lib/redis";
+import { redis } from "@/lib/redis";
 
 import { eq } from "drizzle-orm";
 
 export const FetchFood = async () => {
-  const redis = getRealtime();
   const foodCache = "foods:all";
 
   const cached = await redis.get(foodCache);
