@@ -2,12 +2,14 @@
 
 import { db } from "@/db";
 import { partnerTable } from "@/db/schema";
-import { redis } from "@/lib/redis";
+import { getRealtime } from "@/lib/redis";
+
 import { Partner } from "@/modules/partner/ui/view/partner-view";
 import { eq } from "drizzle-orm";
 
 export async function fetchPartner(userId: string) {
   try {
+    const redis = getRealtime();
     const partnerCachedKey = `Partner:${userId}`;
     const cached = await redis.get(partnerCachedKey);
 

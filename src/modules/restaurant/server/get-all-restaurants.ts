@@ -2,10 +2,11 @@
 
 import { db } from "@/db";
 import { restaurantTable } from "@/db/schema";
-import { redis } from "@/lib/redis";
+
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { Restaurants } from "../components/restaurants-card";
+import { getRealtime } from "@/lib/redis";
 
 interface getAllRestaurantsProps {
   partnerId: string;
@@ -14,6 +15,7 @@ export const getAllRestaurants = async ({
   partnerId,
 }: getAllRestaurantsProps) => {
   try {
+    const redis = getRealtime();
     const { userId: clerkId } = await auth();
 
     if (!clerkId) {
