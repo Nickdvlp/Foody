@@ -2,16 +2,18 @@
 
 import { db } from "@/db";
 import { partnerTable } from "@/db/schema";
-import { redis } from "@/lib/redis";
+
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
 import { Partner } from "../ui/view/partner-view";
+import { getRealtime } from "@/lib/redis";
 
 interface getPartnerProps {
   partnerId: string;
 }
 export const getPartner = async ({ partnerId }: getPartnerProps) => {
   try {
+    const redis = getRealtime();
     const { userId } = await auth();
 
     if (!userId) {
