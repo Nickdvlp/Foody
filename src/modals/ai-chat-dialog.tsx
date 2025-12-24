@@ -24,11 +24,22 @@ const AIChatDialog = () => {
     setMessage((prev) => [...prev, { role: "user", content: userMessage }]);
     setInputValue("");
     startTransition(async () => {
-      const aiReply = await suggestFood(userMessage);
-
-      setMessage((prev) => [...prev, { role: "ai", content: aiReply }]);
+      try {
+        const aiReply = await suggestFood(userMessage);
+        if (!aiReply) {
+          throw new Error("No response from AI");
+        }
+        setMessage((prev) => [...prev, { role: "ai", content: aiReply }]);
+      } catch (error) {
+        console.log(error);
+        toast.error(
+          "AI service is available only on localhost. Please run the app locally."
+        );
+      }
     });
   };
+
+  console.log(Message);
 
   return (
     <div className="h-[80vh] flex flex-col bg-white rounded-3xl shadow-lg overflow-hidden">
