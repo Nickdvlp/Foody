@@ -8,7 +8,8 @@
     "dev:all": "concurrently \"npm run dev\" \"npm run ngrok\"",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "seed:food": "tsx src/db/seedFoodItems.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.32.0",

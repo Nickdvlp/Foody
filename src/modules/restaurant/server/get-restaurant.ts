@@ -10,28 +10,32 @@ interface getRestaurantProps {
 }
 
 export const getRestaurant = async ({ restaurantId }: getRestaurantProps) => {
-  const { userId: clerkId } = await auth();
+  try {
+    const { userId: clerkId } = await auth();
 
-  if (!clerkId) {
-    throw new Error("Unauthorized");
+    if (!clerkId) {
+      throw new Error("Unauthorized");
+    }
+
+    const [user] = await db
+      .select()
+      .from(usersTable)
+      .where(eq(usersTable.clerkId, clerkId));
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (!restaurantId) {
+      throw new Error("Restaurant not found");
+    }
+    const [restaurant] = await db
+      .select()
+      .from(restaurantTable)
+      .where(eq(restaurantTable.id, restaurantId));
+
+    return restaurant;
+  } catch (error) {
+    console.log(error);
   }
-
-  const [user] = await db
-    .select()
-    .from(usersTable)
-    .where(eq(usersTable.clerkId, clerkId));
-
-  if (!user) {
-    throw new Error("User not found");
-  }
-
-  if (!restaurantId) {
-    throw new Error("Restaurant not found");
-  }
-  const [restaurant] = await db
-    .select()
-    .from(restaurantTable)
-    .where(eq(restaurantTable.id, restaurantId));
-
-  return restaurant;
 };

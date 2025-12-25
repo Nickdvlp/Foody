@@ -51,7 +51,7 @@ const formSchema = z.object({
 });
 
 interface EditItemProps {
-  restaurant: Restaurant | undefined;
+  restaurant: Restaurant | null;
   onSuccess: () => void;
 }
 

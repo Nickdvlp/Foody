@@ -12,6 +12,7 @@ import { addCartItemAsync } from "@/store/cart/cartSlice";
 import { AppDispatch } from "@/store";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
+import { useAuth } from "@clerk/nextjs";
 interface Food {
   id: string;
   name: string;
@@ -27,7 +28,12 @@ interface Food {
 const FoodCard = ({ food }: { food: Food }) => {
   const dispatch = useDispatch<AppDispatch>();
   const [isLoading, setIsLoading] = useState(false);
+  const { isSignedIn } = useAuth();
   const addItemToCart = async () => {
+    if (!isSignedIn) {
+      toast.error("Please SignIn first to add items in cart.");
+      return;
+    }
     try {
       setIsLoading(true);
       await dispatch(addCartItemAsync(food.id)).unwrap();

@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { suggestFood } from "@/modules/AI suggestions/server/suggest-food";
-import { Loader2, Send } from "lucide-react";
+import { Send } from "lucide-react";
 import React, { useState, useTransition } from "react";
 import toast from "react-hot-toast";
 

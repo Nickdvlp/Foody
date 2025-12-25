@@ -55,10 +55,17 @@ const RestaurantView = ({ restaurantId }: RestaurantsViewProps) => {
   const [hasUnseenOrders, setHasUnseenOrders] = useState<boolean>(false);
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [error, setError] = useState<string>("");
   useEffect(() => {
     const fetchRestaurant = async () => {
       const data = await getRestaurant({ restaurantId });
-      setRestaurant(data);
+
+      if (!data) {
+        setRestaurant(null);
+        setError("Not Found");
+      } else {
+        setRestaurant(data);
+      }
     };
     fetchRestaurant();
   }, [restaurantId, editOpen, deleteOpen]);
@@ -77,7 +84,7 @@ const RestaurantView = ({ restaurantId }: RestaurantsViewProps) => {
     redirect(`/manage-orders/${restaurantId}`);
   };
 
-  if (!restaurant) {
+  if (error === "Not Found") {
     return (
       <div className="flex items-center justify-center h-screen text-lg font-semibold flex-col">
         Restaurant not found 😴
