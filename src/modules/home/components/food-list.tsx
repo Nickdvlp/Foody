@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FetchFood } from "../server/fetch-food";
 import FoodCard from "./food-card";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
-import { filteredFood, setLoading } from "@/store/food/foodSlice";
+import { appendFoods, filteredFood, setLoading } from "@/store/food/foodSlice";
 import { setFoods } from "@/store/food/foodSlice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export interface Food {
   id: string;
@@ -35,6 +36,8 @@ interface FoodListProps {
 }
 
 const FoodList = ({ filters }: FoodListProps) => {
+  const [page, setPage] = useState<number>(1);
+  const [hasMoreFood, setHasMoreFood] = useState<boolean>(true);
   const dispatch = useDispatch<AppDispatch>();
   const foodItems = useSelector((state: RootState) => state.food.foods);
   const loading = useSelector((state: RootState) => state.food.loading);
@@ -42,7 +45,7 @@ const FoodList = ({ filters }: FoodListProps) => {
   useEffect(() => {
     const fetchfood = async () => {
       dispatch(setLoading(true));
-      const food = await FetchFood();
+      const food = await FetchFood(1);
       const normalized = Array.isArray(food)
         ? food.map((item) => ({
             ...item,
@@ -80,11 +83,34 @@ const FoodList = ({ filters }: FoodListProps) => {
       </div>
     );
   }
+  const LoadMore = async () => {
+    const nextPage = page + 1;
+    const MoreFoodItems = await FetchFood(nextPage);
+    if (!MoreFoodItems || !Array.isArray(MoreFoodItems)) {
+      setHasMoreFood(false);
+      return;
+    }
+
+    const normalized = MoreFoodItems.map((item) => ({
+      ...item,
+      isVeg: item.isVeg ?? false,
+      rating: Number(item.rating) || 0,
+    }));
+    dispatch(appendFoods(normalized));
+    setPage(page + 1);
+  };
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 p-2 place-items-center m-2">
-      {foodItems &&
-        foodItems.map((food) => <FoodCard key={food.id} food={food} />)}
+    <div>
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 p-2 place-items-center m-2">
+        {foodItems &&
+          foodItems.map((food) => <FoodCard key={food.id} food={food} />)}
+      </div>
+      <div className="flex items-center justify-center mb-3">
+        <Button onClick={LoadMore} disabled={!hasMoreFood}>
+          {hasMoreFood ? "Load More" : "No more food 🍽️"}
+        </Button>
+      </div>
     </div>
   );
 };

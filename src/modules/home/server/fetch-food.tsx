@@ -6,8 +6,10 @@ import { redis } from "@/lib/redis";
 
 import { eq } from "drizzle-orm";
 
-export const FetchFood = async () => {
-  const foodCache = "foods:all";
+const PAGE_SIZE = 4;
+export const FetchFood = async (page: number = 1) => {
+  const offset = (page - 1) * PAGE_SIZE;
+  const foodCache = `foods:page:${page}`;
 
   const cached = await redis.get(foodCache);
 
@@ -34,7 +36,9 @@ export const FetchFood = async () => {
     .leftJoin(
       restaurantTable,
       eq(foodItemsTable.restaurantId, restaurantTable.id)
-    );
+    )
+    .limit(PAGE_SIZE)
+    .offset(offset);
 
   await redis.set(foodCache, food, { ex: 120 });
   return food;

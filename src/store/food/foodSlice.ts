@@ -48,6 +48,9 @@ export const foodSlice = createSlice({
       state.filteredFoods = action.payload;
       state.loading = false;
     },
+    appendFoods: (state, action: PayloadAction<Food[]>) => {
+      state.foods.push(...action.payload);
+    },
 
     setSearchQuery: (state, action: PayloadAction<string>) => {
       state.searchQuery = action.payload;
@@ -84,6 +87,11 @@ export const foodSlice = createSlice({
   },
 });
 
-export const { setFoods, setLoading, setSearchQuery, filteredFood } =
-  foodSlice.actions;
+export const {
+  setFoods,
+  appendFoods,
+  setLoading,
+  setSearchQuery,
+  filteredFood,
+} = foodSlice.actions;
 export default foodSlice.reducer;

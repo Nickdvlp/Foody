@@ -13,6 +13,7 @@ import { AppDispatch } from "@/store";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@clerk/nextjs";
+import { FetchFood } from "../server/fetch-food";
 interface Food {
   id: string;
   name: string;
@@ -48,6 +49,7 @@ const FoodCard = ({ food }: { food: Food }) => {
       setIsLoading(false);
     }
   };
+
   return (
     <div className="w-full sm:w-[300px] md:w-[340px] lg:w-[360px] border rounded-2xl shadow-lg border-gray-200 overflow-hidden bg-white hover:shadow-xl transition flex flex-col">
       {/* Image */}
