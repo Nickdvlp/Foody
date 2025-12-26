@@ -50,9 +50,6 @@ const FoodList = ({ filters }: FoodListProps) => {
 
   const observerRef = useRef<HTMLDivElement | null>(null);
 
-  // -------------------------------
-  // Initial fetch
-  // -------------------------------
   useEffect(() => {
     const fetchInitialFood = async () => {
       dispatch(setLoading(true));
@@ -85,9 +82,6 @@ const FoodList = ({ filters }: FoodListProps) => {
     }
   }, [filters, dispatch]);
 
-  // -------------------------------
-  // Load more (memoized)
-  // -------------------------------
   const loadMore = useCallback(async () => {
     if (!hasMoreFood || fetchingMore) return;
 
@@ -113,9 +107,6 @@ const FoodList = ({ filters }: FoodListProps) => {
     setFetchingMore(false);
   }, [page, hasMoreFood, fetchingMore, dispatch]);
 
-  // -------------------------------
-  // Intersection Observer
-  // -------------------------------
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -135,9 +126,6 @@ const FoodList = ({ filters }: FoodListProps) => {
     };
   }, [loadMore]);
 
-  // -------------------------------
-  // Initial loading UI
-  // -------------------------------
   if (loading) {
     return (
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 place-items-center mt-4 relative">
@@ -157,10 +145,6 @@ const FoodList = ({ filters }: FoodListProps) => {
       </div>
     );
   }
-
-  // -------------------------------
-  // Render list
-  // -------------------------------
   return (
     <div>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 p-2 place-items-center m-2">
@@ -169,7 +153,6 @@ const FoodList = ({ filters }: FoodListProps) => {
         ))}
       </div>
 
-      {/* Infinite scroll trigger */}
       <div ref={observerRef} className="h-12 flex justify-center items-center">
         {fetchingMore && <Loader2 className="animate-spin text-orange-500" />}
 
