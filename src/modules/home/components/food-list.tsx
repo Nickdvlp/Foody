@@ -1,15 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { FetchFood } from "../server/fetch-food";
 import FoodCard from "./food-card";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store";
-import { appendFoods, filteredFood, setLoading } from "@/store/food/foodSlice";
-import { setFoods } from "@/store/food/foodSlice";
+import {
+  appendFoods,
+  filteredFood,
+  setLoading,
+  setFoods,
+} from "@/store/food/foodSlice";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 export interface Food {
   id: string;
@@ -36,16 +39,26 @@ interface FoodListProps {
 }
 
 const FoodList = ({ filters }: FoodListProps) => {
-  const [page, setPage] = useState<number>(1);
-  const [hasMoreFood, setHasMoreFood] = useState<boolean>(true);
   const dispatch = useDispatch<AppDispatch>();
+
   const foodItems = useSelector((state: RootState) => state.food.foods);
   const loading = useSelector((state: RootState) => state.food.loading);
 
+  const [page, setPage] = useState(1);
+  const [hasMoreFood, setHasMoreFood] = useState(true);
+  const [fetchingMore, setFetchingMore] = useState(false);
+
+  const observerRef = useRef<HTMLDivElement | null>(null);
+
+  // -------------------------------
+  // Initial fetch
+  // -------------------------------
   useEffect(() => {
-    const fetchfood = async () => {
+    const fetchInitialFood = async () => {
       dispatch(setLoading(true));
+
       const food = await FetchFood(1);
+
       const normalized = Array.isArray(food)
         ? food.map((item) => ({
             ...item,
@@ -53,29 +66,90 @@ const FoodList = ({ filters }: FoodListProps) => {
             rating: Number(item.rating) || 0,
           }))
         : [];
+
       dispatch(setFoods(normalized));
+      dispatch(setLoading(false));
     };
 
-    fetchfood();
+    fetchInitialFood();
   }, [dispatch]);
 
+  // -------------------------------
+  // Apply filters
+  // -------------------------------
   useEffect(() => {
     if (filters) {
       dispatch(filteredFood(filters));
+      setPage(1);
+      setHasMoreFood(true);
     }
   }, [filters, dispatch]);
 
+  // -------------------------------
+  // Load more (memoized)
+  // -------------------------------
+  const loadMore = useCallback(async () => {
+    if (!hasMoreFood || fetchingMore) return;
+
+    setFetchingMore(true);
+
+    const nextPage = page + 1;
+    const moreFood = await FetchFood(nextPage);
+
+    if (!Array.isArray(moreFood) || moreFood.length === 0) {
+      setHasMoreFood(false);
+      setFetchingMore(false);
+      return;
+    }
+
+    const normalized = moreFood.map((item) => ({
+      ...item,
+      isVeg: item.isVeg ?? false,
+      rating: Number(item.rating) || 0,
+    }));
+
+    dispatch(appendFoods(normalized));
+    setPage(nextPage);
+    setFetchingMore(false);
+  }, [page, hasMoreFood, fetchingMore, dispatch]);
+
+  // -------------------------------
+  // Intersection Observer
+  // -------------------------------
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          loadMore();
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    const currentRef = observerRef.current;
+
+    if (currentRef) observer.observe(currentRef);
+
+    return () => {
+      if (currentRef) observer.unobserve(currentRef);
+    };
+  }, [loadMore]);
+
+  // -------------------------------
+  // Initial loading UI
+  // -------------------------------
   if (loading) {
     return (
-      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 place-items-center  mt-4 relative">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-4 place-items-center mt-4 relative">
         {Array.from({ length: 6 }).map((_, i) => (
           <Skeleton
             key={i}
             className="w-full sm:w-[300px] md:w-[340px] lg:w-[360px] h-80"
           />
         ))}
-        <div className="absolute inset-0 flex items-start justify-center mt-10 text-xl font-semibold">
-          <div className="flex items-center justify-center gap-2 bg-orange-200 p-4 rounded-full text-orange-600">
+
+        <div className="absolute inset-0 flex items-start justify-center mt-10">
+          <div className="flex items-center gap-2 bg-orange-200 p-4 rounded-full text-orange-600 font-semibold">
             <Loader2 className="animate-spin" />
             Serving food for you...
           </div>
@@ -83,33 +157,25 @@ const FoodList = ({ filters }: FoodListProps) => {
       </div>
     );
   }
-  const LoadMore = async () => {
-    const nextPage = page + 1;
-    const MoreFoodItems = await FetchFood(nextPage);
-    if (!MoreFoodItems || !Array.isArray(MoreFoodItems)) {
-      setHasMoreFood(false);
-      return;
-    }
 
-    const normalized = MoreFoodItems.map((item) => ({
-      ...item,
-      isVeg: item.isVeg ?? false,
-      rating: Number(item.rating) || 0,
-    }));
-    dispatch(appendFoods(normalized));
-    setPage(page + 1);
-  };
-
+  // -------------------------------
+  // Render list
+  // -------------------------------
   return (
     <div>
       <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-4 p-2 place-items-center m-2">
-        {foodItems &&
-          foodItems.map((food) => <FoodCard key={food.id} food={food} />)}
+        {foodItems.map((food) => (
+          <FoodCard key={food.id} food={food} />
+        ))}
       </div>
-      <div className="flex items-center justify-center mb-3">
-        <Button onClick={LoadMore} disabled={!hasMoreFood}>
-          {hasMoreFood ? "Load More" : "No more food 🍽️"}
-        </Button>
+
+      {/* Infinite scroll trigger */}
+      <div ref={observerRef} className="h-12 flex justify-center items-center">
+        {fetchingMore && <Loader2 className="animate-spin text-orange-500" />}
+
+        {!hasMoreFood && (
+          <p className="text-sm text-gray-500">No more food 🍽️</p>
+        )}
       </div>
     </div>
   );
