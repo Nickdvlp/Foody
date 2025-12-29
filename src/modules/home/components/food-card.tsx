@@ -14,6 +14,7 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { FetchFood } from "../server/fetch-food";
+import { redirect } from "next/navigation";
 interface Food {
   id: string;
   name: string;
@@ -89,7 +90,12 @@ const FoodCard = ({ food }: { food: Food }) => {
         </div>
 
         {food.restaurantName && (
-          <p className="text-xs text-gray-400 mt-1">By {food.restaurantName}</p>
+          <p
+            className="text-xs text-gray-400 mt-1 hover:underline cursor-pointer"
+            onClick={() => redirect(`/restaurant/${food.restaurantId}`)}
+          >
+            By {food.restaurantName}
+          </p>
         )}
 
         <div className="flex items-center justify-between gap-2 mt-3 flex-wrap">
