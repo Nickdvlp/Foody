@@ -33,6 +33,7 @@ import {
 import { EditRestaurant } from "@/modals/edit-restaurant";
 import { DeleteRestaurant } from "@/modals/delete-restaurant";
 import Link from "next/link";
+import { getPartnerRestaurant } from "../server/get-partner-restaurant";
 
 export interface Restaurant {
   id: string;
@@ -58,7 +59,7 @@ const RestaurantView = ({ restaurantId }: RestaurantsViewProps) => {
   const [error, setError] = useState<string>("");
   useEffect(() => {
     const fetchRestaurant = async () => {
-      const data = await getRestaurant({ restaurantId });
+      const data = await getPartnerRestaurant({ restaurantId });
 
       if (!data) {
         setRestaurant(null);
