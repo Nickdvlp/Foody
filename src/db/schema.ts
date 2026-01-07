@@ -168,3 +168,16 @@ export const ratingsReviewsTable = pgTable("ratings_reviews", {
   review: text("review"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+export const mediaTypeEnum = pgEnum("media_type_enum", ["image", "video"]);
+
+export const storyTable = pgTable("story", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  restaurantId: uuid("restaurant_id").notNull(),
+  mediaUrl: text("media_url").notNull(),
+  mediaType: mediaTypeEnum("media_type").notNull().default("image"),
+  caption: text("caption"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+});

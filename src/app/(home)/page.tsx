@@ -7,6 +7,7 @@ import TopRatedButton from "@/modules/home/components/top-rated-button";
 import HomeCarousel from "@/modules/home/ui/home-carousel";
 
 import { useState } from "react";
+import StorySection from "../../modules/story/components/story-section";
 
 export interface Filter {
   selectedCategories: string[];
@@ -25,6 +26,10 @@ export default function Home() {
   return (
     <div className="relative">
       <div>
+        <div className="h-6 flex items-center justify-center bg-orange-400 text-white font-semibold">
+          See the offers and deals on restaurant's stories 🍟
+        </div>
+        <StorySection />
         <HomeCarousel />
         <div className="flex items-center">
           <FilterList setFilters={setFilters} />

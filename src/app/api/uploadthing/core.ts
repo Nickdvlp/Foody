@@ -33,6 +33,30 @@ export const ourFileRouter = {
 
       return { image: file.ufsUrl };
     }),
+  storyMediaUploader: f({
+    image: {
+      maxFileSize: "4MB",
+      maxFileCount: 1,
+    },
+    video: {
+      maxFileSize: "32MB",
+      maxFileCount: 1,
+    },
+  })
+    .middleware(async () => {
+      const { userId } = await auth();
+      if (!userId) throw new UploadThingError("Unauthorized");
+      return { userId };
+    })
+    .onUploadComplete(async ({ file, metadata }) => {
+      const mediaType = file.type.startsWith("video") ? "video" : "image";
+
+      return {
+        mediaUrl: file.ufsUrl,
+        mediaType,
+        userId: metadata.userId,
+      };
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
