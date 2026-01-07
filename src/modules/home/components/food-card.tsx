@@ -13,7 +13,7 @@ import { AppDispatch } from "@/store";
 import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@clerk/nextjs";
-import { FetchFood } from "../server/fetch-food";
+import { easeInOut, motion } from "motion/react";
 import { redirect } from "next/navigation";
 interface Food {
   id: string;
@@ -52,7 +52,14 @@ const FoodCard = ({ food }: { food: Food }) => {
   };
 
   return (
-    <div className="w-full sm:w-[300px] md:w-[340px] lg:w-[360px] border rounded-2xl shadow-lg border-gray-200 overflow-hidden bg-white hover:shadow-xl transition flex flex-col">
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: easeInOut }}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
+      className="w-full sm:w-[300px] md:w-[340px] lg:w-[360px] border rounded-2xl shadow-lg border-gray-200 overflow-hidden bg-white hover:shadow-xl transition flex flex-col"
+    >
       {/* Image */}
       <div className="relative h-40 sm:h-48 w-full">
         <Image
@@ -124,7 +131,7 @@ const FoodCard = ({ food }: { food: Food }) => {
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

@@ -71,9 +71,6 @@ const FoodList = ({ filters }: FoodListProps) => {
     fetchInitialFood();
   }, [dispatch]);
 
-  // -------------------------------
-  // Apply filters
-  // -------------------------------
   useEffect(() => {
     if (filters) {
       dispatch(filteredFood(filters));
