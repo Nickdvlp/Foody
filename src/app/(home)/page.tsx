@@ -27,7 +27,7 @@ export default function Home() {
     <div className="relative">
       <div>
         <div className="h-6 flex items-center justify-center bg-orange-400 text-white font-semibold">
-          See the offers and deals on restaurant's stories 🍟
+          See the offers and deals on restaurant&apos;s stories 🍟
         </div>
         <StorySection />
         <HomeCarousel />
